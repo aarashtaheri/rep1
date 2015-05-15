@@ -25,8 +25,8 @@ public class TestGame {
 	@Test
 	public void test1_Paper_beats_Rock() {
 		
-		player1.setSelectedShape(0);
-		player2.setSelectedShape(1);
+		player1.setSelectedShape(Shape.Rock);
+		player2.setSelectedShape(Shape.Paper);
 		
 		Assert.assertEquals(player1.getSelectedShape(), Shape.Rock);
 		Assert.assertEquals(player2.getSelectedShape(), Shape.Paper);
@@ -34,8 +34,8 @@ public class TestGame {
 		winner = game.whoWins(player1, player2);
 		Assert.assertEquals(player2, winner);
 
-		player1.setSelectedShape(1);
-		player2.setSelectedShape(0);
+		player1.setSelectedShape(Shape.Paper);
+		player2.setSelectedShape(Shape.Rock);
 		
 		Assert.assertEquals(player1.getSelectedShape(), Shape.Paper);
 		Assert.assertEquals(player2.getSelectedShape(), Shape.Rock);
@@ -47,8 +47,8 @@ public class TestGame {
 	@Test
 	public void test2_Scissors_beats_Paper() {
 		
-		player1.setSelectedShape(1);
-		player2.setSelectedShape(2);
+		player1.setSelectedShape(Shape.Paper);
+		player2.setSelectedShape(Shape.Scissors);
 		
 		Assert.assertEquals(player1.getSelectedShape(), Shape.Paper);
 		Assert.assertEquals(player2.getSelectedShape(), Shape.Scissors);
@@ -56,8 +56,8 @@ public class TestGame {
 		winner = game.whoWins(player1, player2);
 		Assert.assertEquals(player2, winner);
 
-		player1.setSelectedShape(2);
-		player2.setSelectedShape(1);
+		player1.setSelectedShape(Shape.Scissors);
+		player2.setSelectedShape(Shape.Paper);
 		
 		Assert.assertEquals(player1.getSelectedShape(), Shape.Scissors);
 		Assert.assertEquals(player2.getSelectedShape(), Shape.Paper);
@@ -69,8 +69,8 @@ public class TestGame {
 	@Test
 	public void test3_Rock_beats_Scissors() {
 		
-		player1.setSelectedShape(0);
-		player2.setSelectedShape(2);
+		player1.setSelectedShape(Shape.Rock);
+		player2.setSelectedShape(Shape.Scissors);
 		
 		Assert.assertEquals(player1.getSelectedShape(), Shape.Rock);
 		Assert.assertEquals(player2.getSelectedShape(), Shape.Scissors);
@@ -78,8 +78,8 @@ public class TestGame {
 		winner = game.whoWins(player1, player2);		
 		Assert.assertEquals(player1, winner);
 		
-		player1.setSelectedShape(2);
-		player2.setSelectedShape(0);
+		player1.setSelectedShape(Shape.Scissors);
+		player2.setSelectedShape(Shape.Rock);
 		
 		Assert.assertEquals(player1.getSelectedShape(), Shape.Scissors);
 		Assert.assertEquals(player2.getSelectedShape(), Shape.Rock);
