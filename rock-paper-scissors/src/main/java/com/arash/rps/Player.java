@@ -49,10 +49,6 @@ public class Player {
 		case 2:
 			setSelectedShape(Shape.Scissors);
 			break;
-		// TODO
-		case 4:
-			selectRandomShape();
-			break;
 		}
 	}
 	

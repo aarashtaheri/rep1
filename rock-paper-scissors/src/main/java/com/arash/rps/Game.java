@@ -3,23 +3,53 @@ package com.arash.rps;
 
 public class Game {
 	
-	private UserInterface ui;
-	
-	public Game(UserInterface ui) {
-		this.ui = ui;
+	private UserInterface userInterface;
+	private Integer gameMode;
+	private Player player1;
+	private Player player2;
+
+	public Player getPlayer1() {
+		return player1;
+	}
+
+	public void setPlayer1(Player player1) {
+		this.player1 = player1;
+	}
+
+	public Player getPlayer2() {
+		return player2;
+	}
+
+	public void setPlayer2(Player player2) {
+		this.player2 = player2;
 	}
 	
-	private int gameMode;
-	
-	private Player p1;
-	private Player p2;
-	
+	public Game(UserInterface ui) {
+		this.userInterface = ui;
+	}
+
+	public void setUI(UserInterface ui) {
+		this.userInterface = ui;
+	}
+
+	public void setGameMode(Integer gameMode) {
+		this.gameMode = gameMode;
+	}
+
 
 	private void selectGameMode() {
 	    String[] options = {"Player vs. Player", "Player vs. Computer", "Computer vs. Computer"};
 	    String msg = "Please select game mode.";
 		
-	    gameMode = ui.selectInput(msg, "Game mode", options);
+	    try {
+			gameMode = userInterface.selectInput(msg, "Game mode", options);
+		} catch (BadInputException e) {
+			System.out.println(e.getLocalizedMessage());
+		}
+	    
+	    if(gameMode == null) {
+	    	selectGameMode();
+	    }
 	}
 	
 	public void startNewGame() {
@@ -29,18 +59,21 @@ public class Game {
 	}
 	
 	public void play() {
-	    selectShape(p1);
-		selectShape(p2);
+	    selectShape(player1);
+		selectShape(player2);
 		
-		Player winner = whoWins(p1, p2);
+		Player winner = whoWins(player1, player2);
 		showWinner(winner);
 	}
 
 	private void showWinner(Player winner) {
+		if (player1 == null || player2 == null) {
+			return;
+		}
 		StringBuilder msg =new StringBuilder();
-		msg.append(p1.getName()).append(" selects :").append(p1.getSelectedShape());
+		msg.append(player1.getName()).append(" selects :").append(player1.getSelectedShape());
 		msg.append("\n");
-		msg.append(p2.getName()).append(" selects :").append(p2.getSelectedShape());
+		msg.append(player2.getName()).append(" selects :").append(player2.getSelectedShape());
 		msg.append("\n");
 		if (winner != null) {
 			msg.append(winner.getName());
@@ -52,7 +85,15 @@ public class Game {
 		
 		
 		String[] options = {"Continue game" , "Show statistics" ,"New game" , "Exit"};
-		int answer = ui.selectInput(msg.toString(), "Winner", options);
+		Integer answer = null;
+		try {
+			answer = userInterface.selectInput(msg.toString(), "Winner", options);
+		} catch (BadInputException e) {
+			System.out.println(e.getLocalizedMessage());
+		}
+		if (answer == null) {
+			showWinner(winner);
+		}
 		switch (answer) {
 		case 0:
 			play();
@@ -76,20 +117,40 @@ public class Game {
 
 	private int showStats() {
 		StringBuilder stats = new StringBuilder();
-		stats.append(p1.getName()).append(" won ").append(p1.getWinns()).append(" times.");
+		stats.append(player1.getName()).append(" won ").append(player1.getWinns()).append(" times.");
 		stats.append("\n"); 
-		stats.append(p2.getName()).append(" won ").append(p2.getWinns()).append(" times.");
+		stats.append(player2.getName()).append(" won ").append(player2.getWinns()).append(" times.");
 		String[] options = {"Continue ...", "Exit"};
-		int answer = ui.selectInput(stats.toString(), "Statistics", options );
+		Integer answer = null;
+		try {
+			answer = userInterface.selectInput(stats.toString(), "Statistics", options );
+		} catch (BadInputException e) {
+			System.out.println(e.getLocalizedMessage());
+		}
+		if (answer == null) {
+			answer = 0;
+		}
 		return answer;
 	}
 
 	private void selectShape(Player player) {
+		if (player == null) {
+			return;
+		}
 		if (player.isHuman()) {
 			String[] options = {"Rock", "Paper", "Scissors"};
 		    String message = "Please make your choice " + player.getName();
-			int shape =  ui.selectInput(message, player.getName(), options);
-			player.setSelectedShape(shape);
+			Integer shape = null;
+			try {
+				shape = userInterface.selectInput(message, player.getName(), options);
+			} catch (BadInputException e) {
+				System.out.println(e.getLocalizedMessage());
+			} 
+			if(shape !=null) {
+				player.setSelectedShape(shape);
+			} else {
+				selectShape(player);
+			}
 		}else {
 			player.selectRandomShape();
 		}
@@ -98,22 +159,25 @@ public class Game {
 	private void initPlayers() {
 		switch (gameMode) {
 		case 0:
-			p1 = new Player("Player 1", true);
-			p2 = new Player("Player 2", true);			
+			player1 = new Player("Player 1", true);
+			player2 = new Player("Player 2", true);			
 			break;
 		case 1:
-			p1 = new Player("Player 1", true);
-			p2 = new Player("Computer", false);			
+			player1 = new Player("Player 1", true);
+			player2 = new Player("Computer", false);			
 			break;
 		case 2:
-			p1 = new Player("Computer 1", false);
-			p2 = new Player("Computer 2", false);			
+			player1 = new Player("Computer 1", false);
+			player2 = new Player("Computer 2", false);			
 			break;
 		}
 	}
 	
 	
-	private Player whoWins(Player player1, Player player2) {
+	public Player whoWins(Player player1, Player player2) {
+		if (player1 == null || player2 == null) {
+			return null;
+		}
 		int p1 = player1.getSelectedShape().getValue();
 		int p2 = player2.getSelectedShape().getValue();
 		if (p1 == p2) {
@@ -121,10 +185,10 @@ public class Game {
 		} 
 		else if  (Math.abs(p1-p2) == 2 ) {
 			if(p1 == 2) {
-				return player1;
+				return player2;
 			}
 			else {
-				return player2;
+				return player1;
 			}
 		} else {
 			if(p1 > p2) {
