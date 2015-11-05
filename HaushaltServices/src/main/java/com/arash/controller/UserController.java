@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +35,24 @@ public class UserController {
 		return userDao.findOne(id);
 	}
 	
+	
+	@RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
+	public @ResponseBody UserEntity updateExpense(@PathVariable int id, @RequestParam(value = "expense") float expense) {
+		System.out.println(expense);
+		
+		return userService.updateExpense(id, 1, expense);
+		
+	}
+	
+	@RequestMapping(value = "/{email}", method = RequestMethod.GET)
+	public @ResponseBody UserEntity getByEmail(@PathVariable String email) {  
+		return userDao.findByEmail(email);
+	}
+	
+	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public @ResponseBody Collection<ExpenseEntity> getExpenses() { 
-		return userService.getExpenses(1, 1);
+	public @ResponseBody ExpenseEntity getExpense() { 
+		return userService.getExpenseByUserIdAndCalculationPeriod(1, 1);
 //		return userDao.findOne(id).getExpenses();
 	}
 }

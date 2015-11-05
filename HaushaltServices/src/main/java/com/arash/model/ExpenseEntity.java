@@ -1,7 +1,9 @@
 package com.arash.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
+import org.hibernate.annotations.LazyCollection;
+import org.springframework.context.annotation.Lazy;
+
 @Entity
 @Table(name = "expense")
 public class ExpenseEntity {
@@ -18,7 +23,7 @@ public class ExpenseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private UserEntity user;
 	
@@ -28,9 +33,8 @@ public class ExpenseEntity {
 	
 	@NotNull
 	@Column(name="sum_expense")
-	private float sum_expense;
+	private float sumExpense;
 	
-	@Null
 	@Column(name="balance")
 	private float balance;
 
@@ -42,12 +46,12 @@ public class ExpenseEntity {
 		this.id = id;
 	}
 
-	public float getSum_expense() {
-		return sum_expense;
+	public float getSumExpense() {
+		return sumExpense;
 	}
 
-	public void setSum_expense(float sum_expense) {
-		this.sum_expense = sum_expense;
+	public void setSumExpense(float sum_expense) {
+		this.sumExpense = sum_expense;
 	}
 
 	public float getBalance() {
@@ -61,5 +65,9 @@ public class ExpenseEntity {
 	public CalculationPeriodEntity getCalculationPeriod() {
 		return calculationPeriod;
 	}
+
+//	public UserEntity getUser() {
+//		return user;
+//	}
 
 }
