@@ -22,7 +22,9 @@ public class ExpenseEntity {
 	@JoinColumn(name="user_id")
 	private UserEntity user;
 	
-	private int calculation_period_id;
+	@ManyToOne
+	@JoinColumn(name="calculation_period_id")
+	private CalculationPeriodEntity calculationPeriod;
 	
 	@NotNull
 	@Column(name="sum_expense")
@@ -38,15 +40,6 @@ public class ExpenseEntity {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-
-	public int getCalculation_period_id() {
-		return calculation_period_id;
-	}
-
-	public void setCalculation_period_id(int calculation_period_id) {
-		this.calculation_period_id = calculation_period_id;
 	}
 
 	public float getSum_expense() {
