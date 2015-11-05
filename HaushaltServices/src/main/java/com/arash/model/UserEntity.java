@@ -1,5 +1,6 @@
 package com.arash.model;
 
+import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ public class UserEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
 
 	@NotNull
 	private String email;
@@ -25,12 +26,12 @@ public class UserEntity {
 	private String name;
 
 	@OneToMany(mappedBy="user")
-	private Set<ExpenseEntity> expenses;
+	private Collection<ExpenseEntity> expenses;
 
 	public UserEntity() {
 	}
 
-	public UserEntity(long id) {
+	public UserEntity(int id) {
 		this.id = id;
 	}
 
@@ -45,7 +46,7 @@ public class UserEntity {
 		return id;
 	}
 
-	public void setId(long value) {
+	public void setId(int value) {
 		this.id = value;
 	}
 
@@ -65,7 +66,7 @@ public class UserEntity {
 		this.name = value;
 	}
 
-	public Set<ExpenseEntity> getExpenses() {
+	public Collection<ExpenseEntity> getExpenses() {
 		return expenses;
 	}
 

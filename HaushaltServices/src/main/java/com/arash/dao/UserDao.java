@@ -16,7 +16,7 @@ import com.arash.model.UserEntity;
  * @author netgloo
  */
 @Transactional
-public interface UserDao extends CrudRepository<UserEntity, Long> {
+public interface UserDao extends CrudRepository<UserEntity, Integer> {
 
   /**
    * Return the user having the passed email or null if no user is found.
@@ -24,5 +24,5 @@ public interface UserDao extends CrudRepository<UserEntity, Long> {
    * @param email the user email.
    */
   public UserEntity findByEmail(String email);
-
+  
 } 

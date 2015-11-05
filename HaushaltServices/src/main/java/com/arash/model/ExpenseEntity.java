@@ -58,4 +58,8 @@ public class ExpenseEntity {
 		this.balance = balance;
 	}
 
+	public CalculationPeriodEntity getCalculationPeriod() {
+		return calculationPeriod;
+	}
+
 }
