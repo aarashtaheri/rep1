@@ -4,7 +4,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.arash.model.User;
+import com.arash.model.UserEntity;
 
 /**
  * A DAO for the entity User is simply created by extending the CrudRepository
@@ -16,13 +16,13 @@ import com.arash.model.User;
  * @author netgloo
  */
 @Transactional
-public interface UserDao extends CrudRepository<User, Long> {
+public interface UserDao extends CrudRepository<UserEntity, Long> {
 
   /**
    * Return the user having the passed email or null if no user is found.
    * 
    * @param email the user email.
    */
-  public User findByEmail(String email);
+  public UserEntity findByEmail(String email);
 
 } 
