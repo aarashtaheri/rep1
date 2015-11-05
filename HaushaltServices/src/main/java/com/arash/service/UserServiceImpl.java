@@ -1,7 +1,9 @@
 package com.arash.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -28,10 +30,11 @@ public class UserServiceImpl implements IUserService {
 	public ExpenseEntity getExpenseByUserIdAndCalculationPeriod(int userId, int calculationPeriod) {
 		
 		List<ExpenseEntity> expenses = (List<ExpenseEntity>) userDao.findOne(userId).getExpenses();
-		
-		List<ExpenseEntity> ex = expenses.stream().filter(
-				p -> p.getCalculationPeriod().getId() == calculationPeriod).collect(Collectors.toList());		
-		return ex.get(0);
+			
+		 ExpenseEntity exp = expenses.stream()
+				 .filter(p -> p.getCalculationPeriod().getId() == calculationPeriod)
+				 .findFirst().get();		
+		return exp;
 	}
 
 	@Transactional
@@ -46,15 +49,14 @@ public class UserServiceImpl implements IUserService {
 				
 		// 2. update the balance of all users according to the new expense
 		float sumAllExpenses = 0;
-		// TODO user lambda
-		Iterable<UserEntity> users = userDao.findAll();
+		// TODO use lambda
+		Collection<UserEntity> users = (Collection<UserEntity>) userDao.findAll();
 		for (UserEntity userEntity : users) {
 			sumAllExpenses +=  getExpenseByUserIdAndCalculationPeriod(userEntity.getId(), calculationPeriod).getSumExpense();
 		}
+
+		int numberOfUsers =  Iterators.size(users.iterator());
 		
-		int numberOfUsers =  Iterators.size( users.iterator());
-		
-		users = userDao.findAll();
 		for (UserEntity userEntity : users) {
 			expense = getExpenseByUserIdAndCalculationPeriod(userEntity.getId(), calculationPeriod);
 			float balance = expense.getSumExpense() - (sumAllExpenses/numberOfUsers);
