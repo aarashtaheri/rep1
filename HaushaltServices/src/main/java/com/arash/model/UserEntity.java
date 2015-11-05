@@ -42,7 +42,7 @@ public class UserEntity {
 
 	// Getter and setter methods
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

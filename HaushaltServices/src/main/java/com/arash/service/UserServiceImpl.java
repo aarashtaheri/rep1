@@ -6,9 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.neo4j.cypher.internal.compiler.v2_1.ast.GreaterThan;
-import org.neo4j.cypher.internal.compiler.v2_1.functions.Exp;
-import org.neo4j.cypher.internal.compiler.v2_1.planner.logical.steps.selectCovered;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +13,7 @@ import com.arash.dao.ExpenseDao;
 import com.arash.dao.UserDao;
 import com.arash.model.ExpenseEntity;
 import com.arash.model.UserEntity;
+import com.google.common.collect.Iterators;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -45,11 +43,25 @@ public class UserServiceImpl implements IUserService {
 		ExpenseEntity expense = getExpenseByUserIdAndCalculationPeriod(userId, calculationPeriod);
 		expense.setSumExpense(newValue);
 		expenseDao.save(expense);
-		
-		
+				
 		// 2. update the balance of all users according to the new expense
+		float sumAllExpenses = 0;
+		// TODO user lambda
+		Iterable<UserEntity> users = userDao.findAll();
+		for (UserEntity userEntity : users) {
+			sumAllExpenses +=  getExpenseByUserIdAndCalculationPeriod(userEntity.getId(), calculationPeriod).getSumExpense();
+		}
 		
+		int numberOfUsers =  Iterators.size( users.iterator());
 		
+		users = userDao.findAll();
+		for (UserEntity userEntity : users) {
+			expense = getExpenseByUserIdAndCalculationPeriod(userEntity.getId(), calculationPeriod);
+			float balance = expense.getSumExpense() - (sumAllExpenses/numberOfUsers);
+			expense.setBalance(balance);
+			expenseDao.save(expense);
+		}
+
 		return user;
 	}
 

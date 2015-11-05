@@ -37,10 +37,10 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
-	public @ResponseBody UserEntity updateExpense(@PathVariable int id, @RequestParam(value = "expense") float expense) {
+	public @ResponseBody UserEntity updateExpense(@PathVariable int id, @RequestParam(value = "periodId") int periodId,  @RequestParam(value = "expense") float expense) {
 		System.out.println(expense);
 		
-		return userService.updateExpense(id, 1, expense);
+		return userService.updateExpense(id, periodId, expense);
 		
 	}
 	
