@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="Main" cloudDestinationProperty="Main" layout="BoxLayout" boxLayoutAxis="Y" title="Hi World" >
+  <component type="TextArea" name="TextArea" cloudBoundProperty="text" cloudDestinationProperty="TextArea" text="TextArea" >
+  </component>
+  <component type="Button" name="Button" cloudDestinationProperty="Button" text="Add" >
+  </component>
+  <component type="Label" name="Label" cloudDestinationProperty="Label" text="Summe:" >
+  </component>
+  <component type="Label" name="lblSummeAll" cloudDestinationProperty="LabelSummeAlle" text="Summe Alle:" >
+  </component>
+  <component type="Label" name="lblMeinAnteil" cloudDestinationProperty="Label2" text="Mein Anteil" >
+  </component>
+</component>
