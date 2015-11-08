@@ -35,24 +35,18 @@ public class UserController {
 		return userDao.findOne(id);
 	}
 	
-	
-	@RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
-	public @ResponseBody UserEntity updateExpense(@PathVariable int id, @RequestParam(value = "periodId") int periodId,  @RequestParam(value = "expense") float expense) {
-		System.out.println(expense);
-		
-		return userService.updateExpense(id, periodId, expense);
-		
+	@RequestMapping(value = "/{userId}/updateExpense", method = RequestMethod.GET)
+	public @ResponseBody UserEntity updateExpense(@PathVariable int userId, @RequestParam(value = "periodId") int periodId,  @RequestParam(value = "expense") float expense) {
+		return userService.updateExpense(userId, periodId, expense);
 	}
 	
-	@RequestMapping(value = "/{email}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{userId}/getExpense", method = RequestMethod.GET)
+	public @ResponseBody ExpenseEntity getExpense(@PathVariable int userId, @RequestParam(value = "periodId") int periodId) { 
+		return userService.getExpenseByUserIdAndCalculationPeriod(userId, periodId);
+	}
+
+	@RequestMapping(value = "/getByEmail/{email}", method = RequestMethod.GET)
 	public @ResponseBody UserEntity getByEmail(@PathVariable String email) {  
 		return userDao.findByEmail(email);
-	}
-	
-	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public @ResponseBody ExpenseEntity getExpense() { 
-		return userService.getExpenseByUserIdAndCalculationPeriod(1, 1);
-//		return userDao.findOne(id).getExpenses();
 	}
 }
