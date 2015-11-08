@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class UserEntity {
 	@NotNull
 	private String name;
 
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
 	private Collection<ExpenseEntity> expenses;
 
 	public UserEntity() {

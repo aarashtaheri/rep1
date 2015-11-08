@@ -26,6 +26,13 @@ public class CalculationPeriodEntity {
 //	public Set<ExpenseEntity> getExpenses() {
 //		return expenses;
 //	}
+
+	public CalculationPeriodEntity() {
+	}
+	public CalculationPeriodEntity(int month, int year) {
+		this.month = month;
+		this.year = year;
+	}
 	
 	public int getId() {
 		return id;

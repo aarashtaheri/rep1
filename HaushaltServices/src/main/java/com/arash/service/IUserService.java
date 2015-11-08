@@ -1,9 +1,8 @@
 package com.arash.service;
 
-import java.util.Collection;
-
 import org.springframework.stereotype.Service;
 
+import com.arash.model.ExpenseDTO;
 import com.arash.model.ExpenseEntity;
 import com.arash.model.UserEntity;
 
@@ -14,4 +13,5 @@ public interface IUserService {
 	
 	public UserEntity updateExpense(int userId, int calcPeriodId, float newValue);
 
+	public ExpenseDTO getExpenseByUserIdAndCalculationPeriod2(int userId, int calculationPeriod);
 }

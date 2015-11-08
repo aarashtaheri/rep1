@@ -3,11 +3,12 @@ package com.arash.controller;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
+import com.arash.model.ExpenseDTO;
 import com.arash.model.ExpenseEntity;
 import com.arash.model.UserEntity;
 import com.google.common.collect.Iterators;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 public class UserControllerTest {
 	String server = "http://localhost:8080/";
@@ -32,7 +33,7 @@ public class UserControllerTest {
 	@Test
 	public void getExpense() {
         RestTemplate restTemplate = new RestTemplate();
-        ExpenseEntity expense= restTemplate.getForObject(server + "users/1/getExpense?periodId=1", ExpenseEntity.class);
-        Assert.assertEquals(11, expense.getCalculationPeriod().getMonth());
+        ExpenseDTO expense = restTemplate.getForObject(server + "users/1/getExpense?periodId=1", ExpenseDTO.class);
+        Assert.assertNotNull(expense);
 	}
 }

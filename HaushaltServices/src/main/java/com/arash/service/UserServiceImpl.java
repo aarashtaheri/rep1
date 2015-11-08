@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.arash.dao.ExpenseDao;
 import com.arash.dao.UserDao;
+import com.arash.model.CalculationPeriodEntity;
+import com.arash.model.ExpenseDTO;
 import com.arash.model.ExpenseEntity;
 import com.arash.model.UserEntity;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -28,13 +31,55 @@ public class UserServiceImpl implements IUserService {
 	
 	@Override
 	public ExpenseEntity getExpenseByUserIdAndCalculationPeriod(int userId, int calculationPeriod) {
+
+		
+//		@SuppressWarnings("unused")
+//		Iterable<ExpenseEntity> espensesForPeriod = expenseDao.findByCalculationPeriod(new CalculationPeriodEntity(11,2105));
+
 		
 		List<ExpenseEntity> expenses = (List<ExpenseEntity>) userDao.findOne(userId).getExpenses();
 			
-		 ExpenseEntity exp = expenses.stream()
+		ExpenseEntity exp = expenses.stream()
 				 .filter(p -> p.getCalculationPeriod().getId() == calculationPeriod)
-				 .findFirst().get();		
+				 .findFirst().get();
+		 
 		return exp;
+	}
+	
+	public ExpenseDTO getExpenseByUserIdAndCalculationPeriod2(int userId, int calculationPeriod) {
+		
+		List<ExpenseEntity> expenses = (List<ExpenseEntity>) userDao.findOne(userId).getExpenses();
+		
+		// find element in list using lambda
+		ExpenseEntity exp = expenses.stream()
+				 .filter(p -> p.getCalculationPeriod().getId() == calculationPeriod)
+				 .findFirst().get();
+		
+		ExpenseDTO expenseDTO = new ExpenseDTO();
+		
+		expenseDTO.setUserId(userId);
+		
+		expenseDTO.setMyBalance(exp.getBalance());
+		expenseDTO.setSumMyExpenses(exp.getSumExpense());
+		
+
+		List<ExpenseEntity> expensesAll = Lists.newArrayList( expenseDao.findAll());
+		
+		//filter elements in a list using lambda
+		List<ExpenseEntity> expensesForPeriod = expensesAll.stream().
+		filter(e -> e.getCalculationPeriod().getId() == calculationPeriod).collect(Collectors.toList());
+		
+		//sum using lambda
+		double sumExpsensesInPeriod = expensesAll.stream().
+				filter(e -> e.getCalculationPeriod().getId() == calculationPeriod)
+				.collect(Collectors.summarizingDouble(ExpenseEntity::getSumExpense)).getSum();
+		
+		expenseDTO.setSumEspensesOfAllUsers((float) sumExpsensesInPeriod);
+		expenseDTO.setEachOneShouldPay((float) (sumExpsensesInPeriod/3));
+		
+		System.out.println(sumExpsensesInPeriod);
+		 
+		return expenseDTO;
 	}
 
 	@Transactional

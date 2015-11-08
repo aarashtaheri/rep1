@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arash.model.ExpenseDTO;
 import com.arash.model.ExpenseEntity;
 import com.arash.model.UserEntity;
 import com.arash.service.IUserService;
@@ -41,12 +42,17 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{userId}/getExpense", method = RequestMethod.GET)
-	public @ResponseBody ExpenseEntity getExpense(@PathVariable int userId, @RequestParam(value = "periodId") int periodId) { 
-		return userService.getExpenseByUserIdAndCalculationPeriod(userId, periodId);
+	public @ResponseBody ExpenseDTO getExpense(@PathVariable int userId, @RequestParam(value = "periodId") int periodId) { 
+		return userService.getExpenseByUserIdAndCalculationPeriod2(userId, periodId);
 	}
 
 	@RequestMapping(value = "/getByEmail/{email}", method = RequestMethod.GET)
 	public @ResponseBody UserEntity getByEmail(@PathVariable String email) {  
 		return userDao.findByEmail(email);
 	}
+	
+//	@RequestMapping(value = "/test", method = RequestMethod.GET)
+//	public @ResponseBody ExpenseDTO test() {  
+//		return userService.getExpenseByUserIdAndCalculationPeriod2(1, 1);
+//	}
 }
