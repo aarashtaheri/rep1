@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arash.dao.CalculationPeriodDao;
 import com.arash.dao.ExpenseDao;
 import com.arash.dao.UserDao;
 import com.arash.model.CalculationPeriodEntity;
@@ -28,6 +29,9 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	ExpenseDao expenseDao;
+	
+	@Autowired
+	CalculationPeriodDao periodDao;
 	
 	@Override
 	public ExpenseEntity getExpenseByUserIdAndCalculationPeriod(int userId, int calculationPeriod) {
@@ -104,12 +108,52 @@ public class UserServiceImpl implements IUserService {
 		
 		for (UserEntity userEntity : users) {
 			expense = getExpenseByUserIdAndCalculationPeriod(userEntity.getId(), calculationPeriod);
-			float balance = expense.getSumExpense() - (sumAllExpenses/numberOfUsers);
+			double balance = expense.getSumExpense() - (sumAllExpenses/numberOfUsers);
 			expense.setBalance(balance);
 			expenseDao.save(expense);
 		}
 
 		return user;
+	}
+
+	@Override
+	public void initDB() {
+		UserEntity arash = new UserEntity("arash", "");
+		userDao.save(arash);
+		
+		UserEntity omid = new UserEntity("omid", "");
+		userDao.save(omid);
+		
+		UserEntity afsane = new UserEntity("afsane", "");
+		userDao.save(afsane);
+		
+		CalculationPeriodEntity c1 = new CalculationPeriodEntity(11,2015);
+		CalculationPeriodEntity c2 = new CalculationPeriodEntity(12,2015);
+		CalculationPeriodEntity c3 = new CalculationPeriodEntity(1,2016);
+		CalculationPeriodEntity c4 = new CalculationPeriodEntity(2,2016);
+		CalculationPeriodEntity c5 = new CalculationPeriodEntity(3,2016);
+		CalculationPeriodEntity c6 = new CalculationPeriodEntity(4,2016);
+		
+		periodDao.save(c1);
+		periodDao.save(c2);
+		periodDao.save(c3);
+		periodDao.save(c4);
+		periodDao.save(c5);
+		periodDao.save(c6);
+		
+		ExpenseEntity exp1_arash = new ExpenseEntity(arash, c1);
+		ExpenseEntity exp1_omid = new ExpenseEntity(omid, c1);
+		ExpenseEntity exp1_afsane = new ExpenseEntity(afsane, c1);
+		ExpenseEntity exp2_arash = new ExpenseEntity(arash, c2);
+		ExpenseEntity exp2_omid = new ExpenseEntity(omid, c2);
+		ExpenseEntity exp2_afsane = new ExpenseEntity(afsane, c2);
+		expenseDao.save(exp1_arash);
+		expenseDao.save(exp1_omid);
+		expenseDao.save(exp1_afsane);
+		expenseDao.save(exp2_arash);
+		expenseDao.save(exp2_omid);
+		expenseDao.save(exp2_afsane);
+		
 	}
 
 }

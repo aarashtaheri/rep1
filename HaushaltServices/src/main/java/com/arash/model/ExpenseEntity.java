@@ -33,10 +33,18 @@ public class ExpenseEntity {
 	
 	@NotNull
 	@Column(name="sum_expense")
-	private float sumExpense;
+	private double sumExpense;
 	
 	@Column(name="balance")
-	private float balance;
+	private double balance;
+	
+	public ExpenseEntity() {}
+	
+	public ExpenseEntity(UserEntity user, CalculationPeriodEntity calculationPeriod) {
+		this.user = user;
+		this.calculationPeriod = calculationPeriod;
+	}
+	
 
 	public int getId() {
 		return id;
@@ -46,19 +54,19 @@ public class ExpenseEntity {
 		this.id = id;
 	}
 
-	public float getSumExpense() {
+	public double getSumExpense() {
 		return sumExpense;
 	}
 
-	public void setSumExpense(float sum_expense) {
+	public void setSumExpense(double sum_expense) {
 		this.sumExpense = sum_expense;
 	}
 
-	public float getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(float balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 

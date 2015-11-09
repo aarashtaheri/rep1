@@ -51,6 +51,11 @@ public class UserController {
 		return userDao.findByEmail(email);
 	}
 	
+	@RequestMapping(value = "/initdb", method = RequestMethod.GET)
+	public void initDB() {  
+		 userService.initDB();
+	}
+	
 //	@RequestMapping(value = "/test", method = RequestMethod.GET)
 //	public @ResponseBody ExpenseDTO test() {  
 //		return userService.getExpenseByUserIdAndCalculationPeriod2(1, 1);

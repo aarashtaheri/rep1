@@ -20,12 +20,11 @@ public class UserEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@NotNull
 	private String email;
 
 	@NotNull
 	private String name;
-
+	
 	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
 	private Collection<ExpenseEntity> expenses;
 

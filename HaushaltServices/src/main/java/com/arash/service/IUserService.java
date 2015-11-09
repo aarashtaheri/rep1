@@ -14,4 +14,6 @@ public interface IUserService {
 	public UserEntity updateExpense(int userId, int calcPeriodId, float newValue);
 
 	public ExpenseDTO getExpenseByUserIdAndCalculationPeriod2(int userId, int calculationPeriod);
+	
+	public void initDB();
 }
