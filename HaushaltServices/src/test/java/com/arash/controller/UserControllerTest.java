@@ -21,9 +21,7 @@ import com.arash.dao.UserDao;
 import com.arash.model.ExpenseDTO;
 import com.arash.model.ExpenseEntity;
 import com.arash.model.UserEntity;
-import com.google.common.collect.Iterators;
 
-import net.wimpi.telnetd.io.terminal.ansi;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,9 +57,14 @@ public class UserControllerTest {
 	public void getOneUsers() throws Exception {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/1");
 		ResultActions result = mvc.perform(requestBuilder);
+		//if service available
 		result.andExpect(MockMvcResultMatchers.status().isOk());
 		
 		
+		//see the content of response
+		String content = mvc.perform(requestBuilder).andReturn().getResponse().getContentAsString();
+		String expected = "{\"id\":1,\"email\":\"user1\",\"name\":\"user1@email.com\",\"expenses\":[]}";
+		Assert.assertEquals(expected, content);
 		
 	}
 	
