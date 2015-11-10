@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.arash.Application;
+import com.arash.ApplicationTest;
 import com.arash.dao.UserDao;
 import com.arash.model.ExpenseDTO;
 import com.arash.model.ExpenseEntity;
@@ -27,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes=ApplicationTest.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public class UserControllerTest {
@@ -47,6 +48,8 @@ public class UserControllerTest {
 		
 		UserEntity user1 = new UserEntity("user1", "user1@email.com");
 		userDao.save(user1);
+		UserEntity user2 = new UserEntity("user2", "user2@email.com");
+		userDao.save(user2);
 		System.out.println("created user id= " + user1.getId());
      }
 	
@@ -65,6 +68,11 @@ public class UserControllerTest {
 		String content = mvc.perform(requestBuilder).andReturn().getResponse().getContentAsString();
 		String expected = "{\"id\":1,\"email\":\"user1\",\"name\":\"user1@email.com\",\"expenses\":[]}";
 		Assert.assertEquals(expected, content);
+		
+		RequestBuilder requestBuilder2 = MockMvcRequestBuilders.get("/users/2");;
+		String content2 = mvc.perform(requestBuilder2).andReturn().getResponse().getContentAsString();
+		String expected2 = "{\"id\":2,\"email\":\"user2\",\"name\":\"user2@email.com\",\"expenses\":[]}";
+		Assert.assertEquals(expected2, content2);
 		
 	}
 	

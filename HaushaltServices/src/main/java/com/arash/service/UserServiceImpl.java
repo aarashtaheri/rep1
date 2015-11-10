@@ -118,6 +118,11 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public void initDB() {
+		//only execute if the database is empty
+		if (userDao.findAll().iterator().hasNext()) {
+			return;
+		}
+		
 		UserEntity arash = new UserEntity("arash", "");
 		userDao.save(arash);
 		
