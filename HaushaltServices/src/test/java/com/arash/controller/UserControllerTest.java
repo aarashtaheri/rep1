@@ -18,11 +18,14 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.arash.Application;
 import com.arash.ApplicationTest;
+import com.arash.dao.CalculationPeriodDao;
+import com.arash.dao.ExpenseDao;
 import com.arash.dao.UserDao;
+import com.arash.model.CalculationPeriodEntity;
 import com.arash.model.ExpenseDTO;
 import com.arash.model.ExpenseEntity;
 import com.arash.model.UserEntity;
-
+import com.arash.service.IUserService;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,31 +36,52 @@ import org.junit.Before;
 @IntegrationTest("server.port:0")
 public class UserControllerTest {
 	
-	@Autowired
-	UserDao userDao;
+	@Autowired UserDao userDao;
+	@Autowired ExpenseDao expenseDao;
+	@Autowired CalculationPeriodDao periodDao;
 	
-	@Autowired
-	WebApplicationContext context;
+	
+	@Autowired WebApplicationContext context;
+	
+	@Autowired IUserService userService;
 	
 	MockMvc mvc;
 	
+	UserEntity user1, user2;
+	ExpenseEntity expense1, expense2;
+	CalculationPeriodEntity calculationPeriod;
 
 	@Before
 	public void setup() {
 		this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
 		
-		UserEntity user1 = new UserEntity("user1", "user1@email.com");
+		user1 = new UserEntity("user1", "user1@email.com");
 		userDao.save(user1);
-		UserEntity user2 = new UserEntity("user2", "user2@email.com");
+		user2 = new UserEntity("user2", "user2@email.com");
 		userDao.save(user2);
-		System.out.println("created user id= " + user1.getId());
+		
+		calculationPeriod = new CalculationPeriodEntity(10, 2015);
+		periodDao.save(calculationPeriod);
+		
+		expense1 = new ExpenseEntity(user1, calculationPeriod);
+		expense2 = new ExpenseEntity(user2, calculationPeriod);
+		expenseDao.save(expense1);
+		expenseDao.save(expense2);
+						
      }
+	
+	@Test
+	public void testInsertedData() {
+		Assert.assertEquals(user1, expense1.getUser());
+		Assert.assertEquals(user2, expense2.getUser());
+		
+	}
 	
 	String server = "http://localhost:0/";
 
-	//TODO use mock rest server
 	@Test
-	public void getOneUsers() throws Exception {
+	public void getOneUser_Test() throws Exception {
+		
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/1");
 		ResultActions result = mvc.perform(requestBuilder);
 		//if service available
@@ -66,25 +90,32 @@ public class UserControllerTest {
 		
 		//see the content of response
 		String content = mvc.perform(requestBuilder).andReturn().getResponse().getContentAsString();
-		String expected = "{\"id\":1,\"email\":\"user1\",\"name\":\"user1@email.com\",\"expenses\":[]}";
+		String expected = "{\"id\":1,\"email\":\"user1\",\"name\":\"user1@email.com\"}";
 		Assert.assertEquals(expected, content);
 		
 		RequestBuilder requestBuilder2 = MockMvcRequestBuilders.get("/users/2");;
 		String content2 = mvc.perform(requestBuilder2).andReturn().getResponse().getContentAsString();
-		String expected2 = "{\"id\":2,\"email\":\"user2\",\"name\":\"user2@email.com\",\"expenses\":[]}";
+		String expected2 = "{\"id\":2,\"email\":\"user2\",\"name\":\"user2@email.com\"}";
 		Assert.assertEquals(expected2, content2);
+		
+		System.out.println(content);
+		System.out.println(content2);
 		
 	}
 	
-//	@Test
-//	public void getAllUsers() {
-//        RestTemplate restTemplate = new RestTemplate();
-//        Iterable<UserEntity> users= (Iterable<UserEntity>) restTemplate.getForObject(server + "users/all", Object.class);
-//        
-//        Assert.assertEquals(3 ,Iterators.size(users.iterator()));
-////        Assert.assertEquals("arash", users.iterator().next().getName());
-//	}
-//	
+	@Test
+	public void getAllUsers_Test() throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/users/all");
+		ResultActions result = mvc.perform(requestBuilder);
+		//if service available
+		result.andExpect(MockMvcResultMatchers.status().isOk());
+		
+		//see the content of response
+		String content = mvc.perform(requestBuilder).andReturn().getResponse().getContentAsString();
+		System.out.println(content);		
+		
+	}
+
 //	@Test
 //	public void getExpense() {
 //        RestTemplate restTemplate = new RestTemplate();

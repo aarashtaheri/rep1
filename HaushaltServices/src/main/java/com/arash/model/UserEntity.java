@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "user")
 public class UserEntity {
@@ -25,7 +27,7 @@ public class UserEntity {
 	@NotNull
 	private String name;
 	
-	@OneToMany(mappedBy="user", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="user")
 	private Collection<ExpenseEntity> expenses;
 
 	public UserEntity() {
@@ -66,6 +68,7 @@ public class UserEntity {
 		this.name = value;
 	}
 
+	@JsonIgnore
 	public Collection<ExpenseEntity> getExpenses() {
 		return expenses;
 	}

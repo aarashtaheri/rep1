@@ -16,6 +16,8 @@ import javax.validation.constraints.Null;
 import org.hibernate.annotations.LazyCollection;
 import org.springframework.context.annotation.Lazy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "expense")
 public class ExpenseEntity {
@@ -74,8 +76,9 @@ public class ExpenseEntity {
 		return calculationPeriod;
 	}
 
-//	public UserEntity getUser() {
-//		return user;
-//	}
+	@JsonIgnore
+	public UserEntity getUser() {
+		return user;
+	}
 
 }
