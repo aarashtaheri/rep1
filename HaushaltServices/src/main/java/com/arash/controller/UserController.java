@@ -37,14 +37,6 @@ public class UserController {
 		return userDao.findByEmail(email);
 	}
 
-	// @RequestMapping(value = "/{userId}/getExpense", method =
-	// RequestMethod.GET)
-	// public @ResponseBody ExpenseDTO getExpense(@PathVariable int userId,
-	// @RequestParam(value = "periodId") int periodId) {
-	// return userService.getExpenseByUserIdAndCalculationPeriod2(userId,
-	// periodId);
-	// }
-
 	@RequestMapping(value = "/{username}/getExpense", method = RequestMethod.GET)
 	public @ResponseBody ExpenseDTO getExpenseByUserName(@PathVariable String username,
 			@RequestParam(value = "periodId") int periodId) {
@@ -56,10 +48,10 @@ public class UserController {
 		userService.initDB();
 	}
 
-	@RequestMapping(value = "/{userId}/updateExpense", method = RequestMethod.GET)
-	public @ResponseBody UserEntity updateExpense(@PathVariable int userId,
+	@RequestMapping(value = "/{username}/updateExpense", method = RequestMethod.GET)
+	public @ResponseBody UserEntity updateExpense(@PathVariable String username,
 			@RequestParam(value = "periodId") int periodId, @RequestParam(value = "expense") float expense) {
-		return userService.updateExpense(userId, periodId, expense);
+		return userService.updateExpense(username, periodId, expense);
 	}
 
 	// @RequestMapping("/questions")

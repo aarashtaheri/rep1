@@ -31,6 +31,18 @@ public class UserServiceImpl implements IUserService {
 	@Autowired
 	CalculationPeriodDao periodDao;
 
+	private int findUserId(String username) {
+		UserEntity user = userDao.findByName(username);
+
+		int userId;
+		if (user == null) {
+			throw new RuntimeException("user with name [" + username + "] not found");
+		} else {
+			userId = user.getId();
+		}
+		return userId;
+	}
+
 	@Override
 	public ExpenseEntity getExpenseByUserIdAndCalculationPeriod(int userId, int calculationPeriod) {
 
@@ -48,7 +60,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public ExpenseDTO getExpenseByUserIdAndCalculationPeriod2(int userId, int calculationPeriod) {
+	public ExpenseDTO getExpenseByUserIdAndCalculationPeriod2(String username, int calculationPeriod) {
+
+		int userId = findUserId(username);
 
 		final List<ExpenseEntity> expenses = (List<ExpenseEntity>) userDao.findOne(userId).getExpenses();
 
@@ -80,18 +94,6 @@ public class UserServiceImpl implements IUserService {
 		System.out.println(sumExpsensesInPeriod);
 
 		return expenseDTO;
-	}
-
-	@Override
-	public ExpenseDTO getExpenseByUserIdAndCalculationPeriod2(String username, int calculationPeriod) {
-
-		UserEntity user = userDao.findByName(username);
-
-		if (user == null) {
-			throw new RuntimeException("user" + username + " not found");
-		} else {
-			return this.getExpenseByUserIdAndCalculationPeriod2(user.getId(), calculationPeriod);
-		}
 	}
 
 	@Override
@@ -141,7 +143,10 @@ public class UserServiceImpl implements IUserService {
 
 	@Transactional
 	@Override
-	public UserEntity updateExpense(int userId, int calculationPeriod, float newValue) {
+	public UserEntity updateExpense(String username, int calculationPeriod, float newValue) {
+
+		int userId = findUserId(username);
+
 		// 1 . update the value in the database
 		final UserEntity user = userDao.findOne(userId);
 
