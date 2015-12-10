@@ -18,11 +18,14 @@ import com.arash.model.UserEntity;
 @Transactional
 public interface UserDao extends CrudRepository<UserEntity, Integer> {
 
-  /**
-   * Return the user having the passed email or null if no user is found.
-   * 
-   * @param email the user email.
-   */
-  public UserEntity findByEmail(String email);
-  
-} 
+	/**
+	 * Return the user having the passed email or null if no user is found.
+	 * 
+	 * @param email
+	 *            the user email.
+	 */
+	public UserEntity findByEmail(String email);
+
+	public UserEntity findByName(String name);
+
+}

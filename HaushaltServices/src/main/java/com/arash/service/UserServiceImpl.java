@@ -83,6 +83,18 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
+	public ExpenseDTO getExpenseByUserIdAndCalculationPeriod2(String username, int calculationPeriod) {
+
+		UserEntity user = userDao.findByName(username);
+
+		if (user == null) {
+			throw new RuntimeException("user" + username + " not found");
+		} else {
+			return this.getExpenseByUserIdAndCalculationPeriod2(user.getId(), calculationPeriod);
+		}
+	}
+
+	@Override
 	public void initDB() {
 		// only execute if the database is empty
 		if (userDao.findAll().iterator().hasNext()) {

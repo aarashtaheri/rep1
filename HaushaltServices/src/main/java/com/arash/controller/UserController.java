@@ -37,10 +37,18 @@ public class UserController {
 		return userDao.findByEmail(email);
 	}
 
-	@RequestMapping(value = "/{userId}/getExpense", method = RequestMethod.GET)
-	public @ResponseBody ExpenseDTO getExpense(@PathVariable int userId,
+	// @RequestMapping(value = "/{userId}/getExpense", method =
+	// RequestMethod.GET)
+	// public @ResponseBody ExpenseDTO getExpense(@PathVariable int userId,
+	// @RequestParam(value = "periodId") int periodId) {
+	// return userService.getExpenseByUserIdAndCalculationPeriod2(userId,
+	// periodId);
+	// }
+
+	@RequestMapping(value = "/{username}/getExpense", method = RequestMethod.GET)
+	public @ResponseBody ExpenseDTO getExpenseByUserName(@PathVariable String username,
 			@RequestParam(value = "periodId") int periodId) {
-		return userService.getExpenseByUserIdAndCalculationPeriod2(userId, periodId);
+		return userService.getExpenseByUserIdAndCalculationPeriod2(username, periodId);
 	}
 
 	@RequestMapping(value = "/initdb", method = RequestMethod.GET)
