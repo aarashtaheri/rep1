@@ -74,17 +74,8 @@ public class UserControllerTest {
 
 		// see the content of response
 		final String content = mvc.perform(requestBuilder).andReturn().getResponse().getContentAsString();
-		final String expected = "{\"id\":1,\"email\":\"user1\",\"name\":\"user1@email.com\"}";
+		final String expected = "{\"id\":1,\"email\":null,\"name\":\"arash\"}";
 		Assert.assertEquals(expected, content);
-
-		final RequestBuilder requestBuilder2 = MockMvcRequestBuilders.get("/users/2");
-		;
-		final String content2 = mvc.perform(requestBuilder2).andReturn().getResponse().getContentAsString();
-		final String expected2 = "{\"id\":2,\"email\":\"user2\",\"name\":\"user2@email.com\"}";
-		Assert.assertEquals(expected2, content2);
-
-		System.out.println(content);
-		System.out.println(content2);
 
 	}
 
